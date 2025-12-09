@@ -23,24 +23,40 @@
       border: 1px solid #ccc;
       margin-top: 20px;
     }
+    input {
+      padding: 5px;
+      margin: 5px;
+    }
   </style>
   <script>
-    // Direct target site (no proxy)
-    const TARGET_URL = "https://youtube.com"; // replace with the site you want
+    let currentURL = "";
 
     function checkPIN() {
       const pin = document.getElementById("pin").value;
       if (pin === "1234") {
         document.getElementById("content").style.display = "block";
         document.getElementById("login").style.display = "none";
-        document.getElementById("proxyFrame").src = TARGET_URL;
       } else {
         alert("Wrong PIN");
       }
     }
 
+    function loadURL() {
+      const urlInput = document.getElementById("urlInput").value;
+      if (urlInput) {
+        currentURL = urlInput;
+        document.getElementById("proxyFrame").src = currentURL;
+      } else {
+        alert("Please enter a URL");
+      }
+    }
+
     function openBlank() {
-      window.open(TARGET_URL, "_blank", "noopener,noreferrer");
+      if (currentURL) {
+        window.open(currentURL, "_blank", "noopener,noreferrer");
+      } else {
+        alert("No URL loaded yet");
+      }
     }
 
     function goFullscreen() {
@@ -58,6 +74,7 @@
       document.getElementById("content").style.display = "none";
       document.getElementById("login").style.display = "block";
       document.getElementById("proxyFrame").src = "";
+      currentURL = "";
     }
   </script>
 </head>
@@ -70,6 +87,9 @@
 
   <div id="content">
     <h1>Secure Access</h1>
+    <input type="text" id="urlInput" placeholder="Enter a URL (https://...)" size="40" />
+    <button onclick="loadURL()">Load URL</button>
+    <br>
     <button onclick="openBlank()">Open in about:blank</button>
     <button onclick="goFullscreen()">Fullscreen</button>
     <button onclick="logout()">Logout</button>
